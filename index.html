@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Marmite Bleue – Plan de positionnement</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Barlow',sans-serif;background:#F0F4F8;min-height:100vh;}
+
+/* ── Setup ── */
+#setup{position:fixed;inset:0;background:linear-gradient(160deg,#0EA5E9,#0369A1 60%,#1E3A5F);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px;}
+.scard{background:#fff;border-radius:20px;padding:28px 24px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.35);}
+.sstep{background:#F8FAFC;border-radius:12px;padding:14px;margin-bottom:14px;border:1px solid #E2E8F0;}
+.sinp{width:100%;padding:11px 14px;border:2px solid #E2E8F0;border-radius:10px;font-size:14px;outline:none;margin-top:8px;font-family:inherit;}
+.sinp:focus{border-color:#0EA5E9;}
+.sbtn{width:100%;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#0EA5E9,#0284C7);color:#fff;font-size:15px;font-weight:800;cursor:pointer;margin-top:6px;font-family:inherit;}
+
+/* ── Loading ── */
+#loading{position:fixed;inset:0;background:#F0F4F8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:998;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:36px;height:36px;border:4px solid #E2E8F0;border-top-color:#0EA5E9;border-radius:50%;animation:spin .8s linear infinite;}
+
+/* ── Screen toolbar ── */
+#toolbar{background:#fff;border-bottom:2px solid #E2E8F0;padding:8px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:90;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+#toolbar .brand{display:flex;align-items:center;gap:8px;}
+#toolbar .brand-logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0EA5E9,#0369A1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+#toolbar .brand-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:#0F172A;line-height:1.1;}
+#toolbar .brand-sub{font-size:10px;color:#94A3B8;}
+.day-pills{display:flex;gap:5px;overflow-x:auto;}
+.day-pill{flex-shrink:0;padding:6px 10px;border-radius:8px;border:1px solid #E2E8F0;background:#fff;color:#374151;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .12s;}
+.day-pill.active{background:#0EA5E9;color:#fff;font-weight:700;border-color:#0EA5E9;box-shadow:0 2px 6px rgba(14,165,233,.35);}
+.day-pill.we{color:#DC2626;}
+.tbar-spacer{flex:1;}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#4ADE80;flex-shrink:0;}
+.btn-toolbar{padding:8px 14px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.btn-print{background:linear-gradient(135deg,#0EA5E9,#0284C7);color:#fff;box-shadow:0 2px 6px rgba(14,165,233,.35);}
+.btn-reset-s{background:#F1F5F9;color:#374151;}
+
+/* ── Plan page ── */
+#plan-wrap{padding:16px;}
+.plan-page{
+  width:100%;max-width:1100px;margin:0 auto;
+  background:#fff;border-radius:12px;
+  padding:14px;
+  box-shadow:0 2px 16px rgba(0,0,0,.10);
+}
+
+/* Header plan */
+.plan-header{display:flex;align-items:stretch;gap:8px;padding-bottom:10px;border-bottom:2.5px solid #0EA5E9;margin-bottom:10px;}
+.plan-brand{background:linear-gradient(140deg,#0EA5E9,#0369A1);border-radius:9px;padding:10px 14px;color:#fff;min-width:110px;display:flex;flex-direction:column;justify-content:center;}
+.plan-brand .pbe{font-size:22px;margin-bottom:2px;}
+.plan-brand .pbn{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;line-height:1.15;}
+.plan-brand .pbs{font-size:8px;opacity:.7;margin-top:3px;text-transform:uppercase;letter-spacing:.8px;}
+.info-grid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.info-box{border:1.5px solid #E2E8F0;border-radius:7px;padding:5px 7px;}
+.info-box .ibl{font-size:8px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.info-box input{width:100%;border:none;border-bottom:1px solid #CBD5E1;outline:none;font-size:12px;color:#0F172A;padding:3px 0;font-family:inherit;background:transparent;}
+.info-box .iline{border-bottom:1px solid #CBD5E1;height:20px;margin-top:3px;}
+
+/* Section title */
+.sec-title{display:flex;align-items:center;gap:7px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:1px;margin:6px 0 5px;}
+.sec-title::before,.sec-title::after{content:'';flex:1;height:1px;background:#E2E8F0;}
+
+/* Zones */
+.zone{display:flex;gap:7px;margin-bottom:8px;}
+
+/* Poste card */
+.poste{flex:1;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+.poste.large{flex:1.6;}
+.poste.small{flex:.75;}
+.poste-head{padding:5px 9px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:.3px;display:flex;align-items:center;gap:5px;color:#fff;}
+.poste-head .pico{font-size:14px;}
+.poste-head .pcount{margin-left:auto;font-size:9px;font-weight:600;opacity:.8;background:rgba(255,255,255,.25);padding:1px 5px;border-radius:6px;}
+.poste-body{background:#fff;border:1.5px solid;border-top:none;border-radius:0 0 8px 8px;padding:5px;display:flex;flex-direction:column;gap:4px;}
+.poste-body.grid2{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+
+/* Slot */
+.slot{border:1.5px solid;border-radius:6px;padding:4px 6px;min-height:52px;display:flex;flex-direction:column;gap:2px;position:relative;transition:background .15s;}
+.slot .slot-num{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;opacity:.6;}
+.slot select{width:100%;border:none;border-bottom:1px solid;outline:none;font-size:11px;font-weight:600;background:transparent;cursor:pointer;padding:2px 0;font-family:inherit;-webkit-appearance:none;appearance:none;}
+.slot .horaire{font-size:9px;font-weight:500;margin-top:1px;opacity:.75;}
+.slot .slot-empty{font-size:10px;color:#CBD5E1;font-style:italic;margin-top:4px;}
+
+/* Couleurs par poste */
+.moule    .poste-head{background:#3B82F6;} .moule    .poste-body{border-color:#BFDBFE;} .moule    .slot{border-color:#BFDBFE;background:#EFF6FF;} .moule    .slot select{border-color:#BFDBFE;color:#1E40AF;} .moule    .slot .slot-num{color:#1E40AF;} .moule    .slot .horaire{color:#1E40AF;}
+.sauce    .poste-head{background:#F43F5E;} .sauce    .poste-body{border-color:#FECDD3;} .sauce    .slot{border-color:#FECDD3;background:#FFF1F2;} .sauce    .slot select{border-color:#FECDD3;color:#9F1239;} .sauce    .slot .slot-num{color:#9F1239;} .sauce    .slot .horaire{color:#9F1239;}
+.frite    .poste-head{background:#F97316;} .frite    .poste-body{border-color:#FED7AA;} .frite    .slot{border-color:#FED7AA;background:#FFF7ED;} .frite    .slot select{border-color:#FED7AA;color:#9A3412;} .frite    .slot .slot-num{color:#9A3412;} .frite    .slot .horaire{color:#9A3412;}
+.plonge   .poste-head{background:#22C55E;} .plonge   .poste-body{border-color:#BBF7D0;} .plonge   .slot{border-color:#BBF7D0;background:#F0FDF4;} .plonge   .slot select{border-color:#BBF7D0;color:#14532D;} .plonge   .slot .slot-num{color:#14532D;} .plonge   .slot .horaire{color:#14532D;}
+.salle    .poste-head{background:#F59E0B;} .salle    .poste-body{border-color:#FDE68A;} .salle    .slot{border-color:#FDE68A;background:#FFFBEB;} .salle    .slot select{border-color:#FDE68A;color:#92400E;} .salle    .slot .slot-num{color:#92400E;} .salle    .slot .horaire{color:#92400E;}
+.bar      .poste-head{background:#A855F7;} .bar      .poste-body{border-color:#E9D5FF;} .bar      .slot{border-color:#E9D5FF;background:#FAF5FF;} .bar      .slot select{border-color:#E9D5FF;color:#581C87;} .bar      .slot .slot-num{color:#581C87;} .bar      .slot .horaire{color:#581C87;}
+.dessert  .poste-head{background:#D946EF;} .dessert  .poste-body{border-color:#F0ABFC;} .dessert  .slot{border-color:#F0ABFC;background:#FDF4FF;} .dessert  .slot select{border-color:#F0ABFC;color:#701A75;} .dessert  .slot .slot-num{color:#701A75;} .dessert  .slot .horaire{color:#701A75;}
+.livraison.poste-head{background:#10B981;} .livraison.poste-body{border-color:#A7F3D0;} .livraison.slot{border-color:#A7F3D0;background:#ECFDF5;} .livraison.slot select{border-color:#A7F3D0;color:#065F46;} .livraison.slot .slot-num{color:#065F46;} .livraison.slot .horaire{color:#065F46;}
+
+/* Footer */
+.plan-footer{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:8px;margin-top:6px;padding-top:8px;border-top:1.5px solid #E2E8F0;}
+.footer-box{border:1.5px solid #E2E8F0;border-radius:8px;padding:8px 10px;}
+.footer-box .ftitle{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;}
+.footer-box textarea{width:100%;border:none;outline:none;font-size:11px;font-family:inherit;color:#374151;resize:none;background:transparent;line-height:1.6;}
+.footer-box input{width:100%;border:none;border-bottom:1px solid #E2E8F0;outline:none;font-size:12px;font-family:inherit;padding:2px 0;margin-top:2px;background:transparent;}
+.footer-box .flbl{font-size:8px;color:#94A3B8;font-weight:600;margin-top:6px;text-transform:uppercase;}
+
+/* Print */
+@media print{
+  #setup,#loading,#toolbar{display:none!important;}
+  body{background:#fff;}
+  #plan-wrap{padding:0;}
+  .plan-page{box-shadow:none;border-radius:0;max-width:100%;padding:6mm 8mm;}
+  .slot select{-webkit-appearance:none;appearance:none;}
+  @page{size:A4 landscape;margin:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loading" style="display:none">
+  <div style="font-size:42px">🫙</div>
+  <div class="spinner"></div>
+  <div style="font-size:13px;color:#64748B;font-weight:500">Chargement des données…</div>
+</div>
+
+<!-- Setup -->
+<div id="setup">
+  <div class="scard">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:48px">🫙</div>
+      <div style="font-size:22px;font-weight:800;color:#0F172A;margin-top:6px;font-family:'Barlow Condensed',sans-serif">La Marmite Bleue</div>
+      <div style="font-size:13px;color:#64748B;margin-top:3px">Plan de positionnement</div>
+    </div>
+    <div class="sstep">
+      <div style="font-size:13px;font-weight:700;color:#0F172A">🔑 Votre clé API JSONBin</div>
+      <div style="font-size:11px;color:#64748B;margin-top:4px">Même clé que dans l'application planning</div>
+      <input class="sinp" type="password" id="sk" placeholder="$2a$10$xxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="sstep">
+      <div style="font-size:13px;font-weight:700;color:#0F172A">📦 Bin ID</div>
+      <div style="font-size:11px;color:#64748B;margin-top:4px">Trouvez-le dans ⚙️ Params de l'app planning</div>
+      <input class="sinp" type="text" id="sb" placeholder="ex: 64abc123def456" autocomplete="off" spellcheck="false" style="font-size:13px">
+      <div id="se" style="color:#DC2626;font-size:12px;margin-top:6px;display:none"></div>
+    </div>
+    <button class="sbtn" id="sbtn" onclick="doSetup()">✅ Charger les données</button>
+    <button onclick="useDemo()" style="width:100%;margin-top:8px;padding:10px;border-radius:10px;border:1px solid #E2E8F0;background:#fff;font-size:13px;color:#64748B;cursor:pointer;font-family:inherit">👁️ Essayer sans données (démo)</button>
+  </div>
+</div>
+
+<!-- Toolbar -->
+<div id="toolbar" style="display:none">
+  <div class="brand">
+    <div class="brand-logo">🫙</div>
+    <div><div class="brand-name">La Marmite Bleue</div><div class="brand-sub">Plan de positionnement</div></div>
+  </div>
+  <div class="day-pills" id="day-pills"></div>
+  <div class="tbar-spacer"></div>
+  <div class="sync-dot" id="sync-dot" title="Synchronisé"></div>
+  <button class="btn-toolbar btn-reset-s" onclick="resetAccount()">🔑 Changer</button>
+  <button class="btn-toolbar btn-print" onclick="window.print()">🖨️ Imprimer A4 paysage</button>
+</div>
+
+<!-- Plan -->
+<div id="plan-wrap" style="display:none">
+  <div class="plan-page" id="plan-page">
+
+    <!-- Header -->
+    <div class="plan-header">
+      <div class="plan-brand">
+        <div class="pbe">🫙</div>
+        <div class="pbn">La Marmite<br>Bleue</div>
+        <div class="pbs">Plan de poste</div>
+      </div>
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="ibl">Date</div>
+          <input id="hdr-date" type="text" placeholder="JJ/MM/AAAA">
+          <div class="ibl" style="margin-top:6px">Service</div>
+          <input id="hdr-service" type="text" placeholder="Midi / Soir / Journée">
+        </div>
+        <div class="info-box">
+          <div class="ibl">Couverts prévus</div>
+          <input id="hdr-couverts" type="text" placeholder="—">
+          <div class="ibl" style="margin-top:6px">CA prévu</div>
+          <input id="hdr-ca" type="text" placeholder="—">
+        </div>
+        <div class="info-box">
+          <div class="ibl">Responsable service</div>
+          <input id="hdr-resp" type="text" placeholder="Nom du responsable">
+          <div class="iline"></div>
+        </div>
+        <div class="info-box" style="grid-column:span 2">
+          <div class="ibl">Message du jour</div>
+          <textarea id="hdr-msg" rows="3" style="width:100%;border:none;outline:none;font-size:11px;font-family:inherit;resize:none;background:transparent;margin-top:3px;color:#374151" placeholder="Notes, promotions, événements…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cuisine -->
+    <div class="sec-title">🍳 Cuisine</div>
+    <div class="zone" id="zone-cuisine"></div>
+
+    <!-- Service -->
+    <div class="sec-title">🍽️ Service</div>
+    <div class="zone" id="zone-service"></div>
+
+    <!-- Footer -->
+    <div class="plan-footer">
+      <div class="footer-box">
+        <div class="ftitle">📋 Remarques service</div>
+        <textarea rows="3" style="width:100%;border:none;outline:none;font-size:11px;font-family:inherit;resize:none;background:transparent;color:#374151;line-height:1.7" placeholder="…"></textarea>
+      </div>
+      <div class="footer-box">
+        <div class="ftitle">⚠️ Points d'attention</div>
+        <textarea rows="3" style="width:100%;border:none;outline:none;font-size:11px;font-family:inherit;resize:none;background:transparent;color:#374151;line-height:1.7" placeholder="…"></textarea>
+      </div>
+      <div class="footer-box" style="background:#F0F9FF;border-color:#BAE6FD">
+        <div class="ftitle" style="color:#0369A1">👤 Responsable de quart</div>
+        <div class="flbl">Nom</div>
+        <input type="text" placeholder="__________________________" style="border-bottom:1px solid #BAE6FD!important">
+        <div class="flbl">Signature</div>
+        <div style="border-bottom:1px solid #BAE6FD;height:24px;margin-top:3px"></div>
+        <div style="display:flex;gap:10px;margin-top:4px">
+          <div style="flex:1"><div class="flbl">Date</div><input type="text" placeholder="___/___/______"></div>
+          <div style="flex:1"><div class="flbl">Shift</div><input type="text" placeholder="Midi / Soir"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════
+const POSTES=['Moule','Frite','Bar','Plonge','Sauce','Livraison','Salle','Dessert'];
+const JSONBIN='https://api.jsonbin.io/v3';
+
+// Définition des zones et postes
+const ZONES = {
+  cuisine:[
+    {id:'Moule',    ico:'🦪', cls:'moule',     slots:3, flex:'large'},
+    {id:'Sauce',    ico:'🥣', cls:'sauce',     slots:2, flex:''},
+    {id:'Frite',    ico:'🍟', cls:'frite',     slots:2, flex:''},
+    {id:'Plonge',   ico:'🧼', cls:'plonge',    slots:2, flex:'small'},
+  ],
+  service:[
+    {id:'Salle',     ico:'🍽️', cls:'salle',    slots:4, flex:'large', grid2:true},
+    {id:'Bar',       ico:'🍺', cls:'bar',       slots:2, flex:'small'},
+    {id:'Dessert',   ico:'🍮', cls:'dessert',   slots:2, flex:'small'},
+    {id:'Livraison', ico:'🛵', cls:'livraison', slots:2, flex:'small'},
+  ]
+};
+
+let DATA = {emps:[], plan:{}, fc:{}};
+let SEL_DAY = toISO(new Date());
+let API_KEY='', BIN_ID='';
+// plan de positionnement sauvegardé localement : {dk: {poste_idx: empId}}
+let PLACEMENT = {};
+
+// ══════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════
+function getMonday(d){const r=new Date(d);r.setHours(0,0,0,0);r.setDate(r.getDate()-((r.getDay()||7)-1));return r;}
+function addDays(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r;}
+function toISO(d){return d.toISOString().split('T')[0];}
+function fDay(d){return d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric'});}
+function fDate(d){return new Date(d+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}
+function isWE(d){return new Date(d+'T12:00').getDay()===0||new Date(d+'T12:00').getDay()===6;}
+function getDays(){const m=getMonday(new Date());return Array.from({length:7},(_,i)=>toISO(addDays(m,i)));}
+function fT(m){const h=Math.floor(m/60)%24,mm=m%60;return h+'h'+(mm?String(mm).padStart(2,'0'):'');}
+function mainPoste(e){return(e.postes||[])[0]||POSTES[0];}
+function getShifts(dk,eid){
+  const v=(DATA.plan[dk]||{})[eid];
+  if(!v)return[];
+  if(Array.isArray(v))return v;
+  if(v.s!==undefined)return[v];
+  return[];
+}
+function getHoraire(dk,eid,poste){
+  const shifts=getShifts(dk,eid).filter(sh=>(sh.poste||mainPoste(DATA.emps.find(e=>e.id===eid)||{}))===poste);
+  if(!shifts.length){
+    // Aucun shift avec ce poste exact — prendre tous les shifts
+    const all=getShifts(dk,eid);
+    if(!all.length)return'';
+    return all.map(sh=>fT(sh.s)+'–'+fT(sh.e)).join(' ');
+  }
+  return shifts.map(sh=>fT(sh.s)+'–'+fT(sh.e)).join(' ');
+}
+
+function setSyncDot(st){
+  const d=document.getElementById('sync-dot');
+  if(d)d.style.background=st==='ok'?'#4ADE80':st==='syncing'?'#FCD34D':'#F87171';
+}
+
+// ══════════════════════════════════════
+// JSONBIN
+// ══════════════════════════════════════
+async function loadBin(){
+  setSyncDot('syncing');
+  const r=await fetch(`${JSONBIN}/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':API_KEY}});
+  if(!r.ok)throw new Error();
+  const d=(await r.json()).record;
+  if(d.emps)DATA.emps=d.emps.map(e=>({...e,postes:e.postes||(e.poste?[e.poste]:[]),heures:e.heures||35}));
+  if(d.plan){
+    const np={};
+    for(const dk in d.plan){
+      np[dk]={};
+      for(const eid in d.plan[dk]){
+        const v=d.plan[dk][eid];
+        np[dk][eid]=Array.isArray(v)?v:(v&&v.s!==undefined?[v]:[]);
+      }
+    }
+    DATA.plan=np;
+  }
+  if(d.fc)DATA.fc=d.fc;
+  setSyncDot('ok');
+}
+
+// ══════════════════════════════════════
+// SETUP
+// ══════════════════════════════════════
+async function doSetup(){
+  const key=document.getElementById('sk').value.trim();
+  const bid=document.getElementById('sb').value.trim();
+  const err=document.getElementById('se');err.style.display='none';
+  if(!key.startsWith('$2a$')){err.textContent='❌ Clé invalide (doit commencer par $2a$)';err.style.display='block';return;}
+  if(!bid){err.textContent='❌ Le Bin ID est requis';err.style.display='block';return;}
+  const btn=document.getElementById('sbtn');btn.disabled=true;btn.textContent='⏳ Chargement…';
+  try{
+    API_KEY=key;BIN_ID=bid;
+    await loadBin();
+    localStorage.setItem('pos_key',key);
+    localStorage.setItem('pos_bin',bid);
+    startApp();
+  }catch(e){
+    err.textContent='❌ Impossible de charger — vérifiez la clé et le Bin ID';err.style.display='block';
+    btn.disabled=false;btn.textContent='✅ Charger les données';
+  }
+}
+
+function useDemo(){
+  DATA.emps=[
+    {id:'e1',prenom:'Marie',  nom:'Martin', postes:['Moule','Sauce'],heures:35},
+    {id:'e2',prenom:'Lucas',  nom:'Bernard',postes:['Moule'],heures:35},
+    {id:'e3',prenom:'Sophie', nom:'Dubois', postes:['Frite'],heures:25},
+    {id:'e4',prenom:'Thomas', nom:'Leroy',  postes:['Frite','Sauce'],heures:35},
+    {id:'e5',prenom:'Emma',   nom:'Moreau', postes:['Salle'],heures:30},
+    {id:'e6',prenom:'Julien', nom:'Simon',  postes:['Salle'],heures:35},
+    {id:'e7',prenom:'Chloé',  nom:'Laurent',postes:['Bar','Salle'],heures:25},
+    {id:'e8',prenom:'Alex',   nom:'Garcia', postes:['Plonge'],heures:20},
+    {id:'e9',prenom:'Jade',   nom:'Petit',  postes:['Dessert','Salle'],heures:30},
+    {id:'e10',prenom:'Noah',  nom:'Roux',   postes:['Livraison'],heures:20},
+  ];
+  // Créer un planning démo pour aujourd'hui
+  const dk=SEL_DAY;
+  DATA.plan[dk]={
+    'e1':[{s:11*60+30,e:17*60+30,poste:'Moule'}],
+    'e2':[{s:17*60,e:23*60,poste:'Moule'}],
+    'e3':[{s:11*60+30,e:17*60+30,poste:'Frite'}],
+    'e4':[{s:17*60,e:23*60,poste:'Frite'}],
+    'e5':[{s:11*60+30,e:17*60+30,poste:'Salle'}],
+    'e6':[{s:17*60,e:23*60,poste:'Salle'}],
+    'e7':[{s:11*60+30,e:23*60,poste:'Bar'}],
+    'e8':[{s:12*60,e:20*60,poste:'Plonge'}],
+    'e9':[{s:14*60,e:22*60,poste:'Dessert'}],
+    'e10':[{s:17*60,e:22*60,poste:'Livraison'}],
+  };
+  startApp();
+}
+
+function resetAccount(){
+  localStorage.removeItem('pos_key');localStorage.removeItem('pos_bin');location.reload();
+}
+
+async function init(){
+  const key=localStorage.getItem('pos_key'),bid=localStorage.getItem('pos_bin');
+  if(key&&bid){
+    document.getElementById('setup').style.display='none';
+    document.getElementById('loading').style.display='flex';
+    API_KEY=key;BIN_ID=bid;
+    try{await loadBin();}catch(e){setSyncDot('error');}
+    document.getElementById('loading').style.display='none';
+    startApp();
+  }
+}
+
+function startApp(){
+  document.getElementById('setup').style.display='none';
+  document.getElementById('loading').style.display='none';
+  document.getElementById('toolbar').style.display='flex';
+  document.getElementById('plan-wrap').style.display='block';
+  buildDayPills();
+  buildPlan();
+}
+
+// ══════════════════════════════════════
+// DAY PILLS
+// ══════════════════════════════════════
+function buildDayPills(){
+  const days=getDays();
+  const el=document.getElementById('day-pills');
+  el.innerHTML=days.map(dk=>{
+    const d=new Date(dk+'T12:00'),we=isWE(dk),sel=dk===SEL_DAY;
+    return`<button class="day-pill${sel?' active':''}${!sel&&we?' we':''}" onclick="selectDay('${dk}')">
+      <span style="text-transform:capitalize">${fDay(d)}</span>
+    </button>`;
+  }).join('');
+}
+
+function selectDay(dk){
+  SEL_DAY=dk;
+  buildDayPills();
+  buildPlan();
+}
+
+// ══════════════════════════════════════
+// PLACEMENT LOCAL
+// ══════════════════════════════════════
+function getPlacement(dk,poste,idx){
+  return ((PLACEMENT[dk]||{})[poste]||{})[idx]||null;
+}
+function setPlacement(dk,poste,idx,eid){
+  if(!PLACEMENT[dk])PLACEMENT[dk]={};
+  if(!PLACEMENT[dk][poste])PLACEMENT[dk][poste]={};
+  PLACEMENT[dk][poste][idx]=eid;
+  // Sauvegarder en localStorage
+  localStorage.setItem('pos_placement',JSON.stringify(PLACEMENT));
+}
+
+// ══════════════════════════════════════
+// BUILD PLAN
+// ══════════════════════════════════════
+function buildPlan(){
+  // Remplir l'entête avec les données du jour
+  const fc=DATA.fc[SEL_DAY]||{};
+  const dateEl=document.getElementById('hdr-date');
+  if(dateEl&&!dateEl.value)dateEl.value=new Date(SEL_DAY+'T12:00').toLocaleDateString('fr-FR');
+  const couEl=document.getElementById('hdr-couverts');
+  if(couEl)couEl.placeholder=fc.couverts?fc.couverts+' couverts prévus':'—';
+  const caEl=document.getElementById('hdr-ca');
+  if(caEl)caEl.placeholder=fc.ca?fc.ca+'€':'—';
+
+  // Charger les placements sauvegardés
+  try{const saved=localStorage.getItem('pos_placement');if(saved)PLACEMENT=JSON.parse(saved);}catch(e){}
+
+  buildZone('zone-cuisine','cuisine');
+  buildZone('zone-service','service');
+}
+
+function buildZone(containerId, zoneName){
+  const container=document.getElementById(containerId);
+  container.innerHTML='';
+  ZONES[zoneName].forEach(p=>{
+    container.appendChild(buildPosteCard(p));
+  });
+}
+
+function buildPosteCard(conf){
+  const dk=SEL_DAY;
+  const {id:poste,ico,cls,slots,flex,grid2}=conf;
+
+  // Employés éligibles à ce poste
+  const eligible=DATA.emps.filter(e=>(e.postes||[]).includes(poste));
+  // Employés planifiés ce jour (avec ce poste dans leurs shifts)
+  const planned=DATA.emps.filter(e=>getShifts(dk,e.id).some(sh=>(sh.poste||mainPoste(e))===poste));
+
+  const div=document.createElement('div');
+  div.className=`poste ${cls}${flex?' '+flex:''}`;
+
+  const head=document.createElement('div');
+  head.className='poste-head';
+  head.innerHTML=`<span class="pico">${ico}</span> ${poste} <span class="pcount">${slots} poste${slots>1?'s':''}</span>`;
+  div.appendChild(head);
+
+  const body=document.createElement('div');
+  body.className=`poste-body${grid2?' grid2':''}`;
+  div.appendChild(body);
+
+  for(let i=0;i<slots;i++){
+    const slot=document.createElement('div');
+    slot.className='slot';
+
+    const lbl=document.createElement('div');
+    lbl.className='slot-num';
+    lbl.textContent=grid2?(i<2?'Équipier '+(i+1):'Renfort '+(i-1)):(i===0?'Équipier principal':i===1?'Équipier 2':'Renfort');
+    slot.appendChild(lbl);
+
+    // SELECT
+    const sel=document.createElement('select');
+    sel.innerHTML='<option value="">— Choisir —</option>';
+
+    // Options : d'abord les planifiés, puis les éligibles restants
+    const shown=new Set();
+    if(planned.length){
+      const optg=document.createElement('optgroup');
+      optg.label='✅ Planifiés ce jour';
+      planned.forEach(e=>{
+        const hrs=getHoraire(dk,e.id,poste);
+        const o=document.createElement('option');
+        o.value=e.id;
+        o.textContent=`${e.prenom} ${e.nom}${hrs?' ('+hrs+')':''}`;
+        optg.appendChild(o);
+        shown.add(e.id);
+      });
+      sel.appendChild(optg);
+    }
+    const others=eligible.filter(e=>!shown.has(e.id));
+    if(others.length){
+      const optg2=document.createElement('optgroup');
+      optg2.label='Autres équipiers formés';
+      others.forEach(e=>{
+        const o=document.createElement('option');
+        o.value=e.id;
+        o.textContent=`${e.prenom} ${e.nom}`;
+        optg2.appendChild(o);
+      });
+      sel.appendChild(optg2);
+    }
+    if(!eligible.length){
+      const o=document.createElement('option');
+      o.value='';o.textContent='(Aucun équipier formé)';o.disabled=true;
+      sel.appendChild(o);
+    }
+
+    // Pré-remplissage : placement sauvegardé ou premier planifié disponible
+    let pre=getPlacement(dk,poste,i);
+    if(!pre&&planned[i])pre=planned[i].id;
+    if(pre)sel.value=pre;
+
+    const horaireDiv=document.createElement('div');
+    horaireDiv.className='horaire';
+    const updateHoraire=()=>{
+      const eid=sel.value;
+      if(!eid){horaireDiv.textContent='';return;}
+      const hrs=getHoraire(dk,eid,poste);
+      horaireDiv.textContent=hrs||'';
+      setPlacement(dk,poste,i,eid);
+    };
+    sel.addEventListener('change',updateHoraire);
+    updateHoraire();
+
+    slot.appendChild(sel);
+    slot.appendChild(horaireDiv);
+    body.appendChild(slot);
+  }
+
+  return div;
+}
+
+// ══════════════════════════════════════
+// START
+// ══════════════════════════════════════
+init();
+</script>
+</body>
+</html>
