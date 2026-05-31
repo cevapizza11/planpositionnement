@@ -369,15 +369,46 @@ function useDemo(){
   startApp();
 }
 
-async function reloadData(){
-  if(!API_KEY||!BIN_ID)return;
+function reloadData(){
+  const btn=document.querySelector('[onclick="reloadData()"]');
+  if(btn){btn.textContent='⏳ Actualisation…';btn.disabled=true;}
   setSyncDot('syncing');
-  try{
-    await loadBin();
-    PLACEMENT={};
-    localStorage.removeItem('pos_placement');
-    buildPlan();
-  }catch(e){setSyncDot('error');}
+
+  if(!API_KEY||!BIN_ID){
+    // Pas de clé — recharger depuis localStorage
+    const key=localStorage.getItem('pos_key'),bid=localStorage.getItem('pos_bin');
+    if(key&&bid){API_KEY=key;BIN_ID=bid;}
+    else{setSyncDot('error');if(btn){btn.textContent='🔄 Actualiser';btn.disabled=false;}return;}
+  }
+
+  fetch(JSONBIN+'/b/'+BIN_ID+'/latest',{headers:{'X-Master-Key':API_KEY}})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(function(json){
+      const d=json.record;
+      if(d.emps)DATA.emps=d.emps.map(function(e){return Object.assign({},e,{postes:e.postes||(e.poste?[e.poste]:[]),heures:e.heures||35});});
+      if(d.plan){
+        var np={};
+        Object.keys(d.plan).forEach(function(dk){
+          np[dk]={};
+          Object.keys(d.plan[dk]).forEach(function(eid){
+            var v=d.plan[dk][eid];
+            np[dk][eid]=Array.isArray(v)?v:(v&&v.s!==undefined?[v]:[]);
+          });
+        });
+        DATA.plan=np;
+      }
+      if(d.fc)DATA.fc=d.fc;
+      PLACEMENT={};
+      localStorage.removeItem('pos_placement');
+      setSyncDot('ok');
+      buildPlan();
+      if(btn){btn.textContent='✅ Actualisé';btn.disabled=false;setTimeout(function(){btn.textContent='🔄 Actualiser';},2000);}
+    })
+    .catch(function(err){
+      console.error('Reload error:',err);
+      setSyncDot('error');
+      if(btn){btn.textContent='❌ Erreur';btn.disabled=false;setTimeout(function(){btn.textContent='🔄 Actualiser';},3000);}
+    });
 }
 
 function resetAccount(){
