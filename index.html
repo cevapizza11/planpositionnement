@@ -263,7 +263,9 @@ let PLACEMENT = {};
 // ══════════════════════════════════════
 function getMonday(d){const r=new Date(d);r.setHours(0,0,0,0);r.setDate(r.getDate()-((r.getDay()||7)-1));return r;}
 function addDays(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r;}
-function toISO(d){return d.toISOString().split('T')[0];}
+function toISO(d){
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
 function fDay(d){return d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric'});}
 function fDate(d){return new Date(d+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}
 function isWE(d){return new Date(d+'T12:00').getDay()===0||new Date(d+'T12:00').getDay()===6;}
