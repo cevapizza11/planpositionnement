@@ -154,6 +154,7 @@ body{font-family:'Barlow',sans-serif;background:#F0F4F8;min-height:100vh;}
   <div class="day-pills" id="day-pills"></div>
   <div class="tbar-spacer"></div>
   <div class="sync-dot" id="sync-dot" title="Synchronisé"></div>
+  <button class="btn-toolbar btn-reset-s" onclick="reloadData()">🔄 Actualiser</button>
   <button class="btn-toolbar btn-reset-s" onclick="resetAccount()">🔑 Changer</button>
   <button class="btn-toolbar btn-print" onclick="window.print()">🖨️ Imprimer A4 paysage</button>
 </div>
@@ -368,6 +369,17 @@ function useDemo(){
   startApp();
 }
 
+async function reloadData(){
+  if(!API_KEY||!BIN_ID)return;
+  setSyncDot('syncing');
+  try{
+    await loadBin();
+    PLACEMENT={};
+    localStorage.removeItem('pos_placement');
+    buildPlan();
+  }catch(e){setSyncDot('error');}
+}
+
 function resetAccount(){
   localStorage.removeItem('pos_key');localStorage.removeItem('pos_bin');location.reload();
 }
@@ -459,10 +471,17 @@ function buildPosteCard(conf){
   const dk=SEL_DAY;
   const {id:poste,ico,cls,slots,flex,grid2}=conf;
 
-  // Employés éligibles à ce poste
+  // Employés éligibles à ce poste (formés)
   const eligible=DATA.emps.filter(e=>(e.postes||[]).includes(poste));
-  // Employés planifiés ce jour (avec ce poste dans leurs shifts)
-  const planned=DATA.emps.filter(e=>getShifts(dk,e.id).some(sh=>(sh.poste||mainPoste(e))===poste));
+  // Employés planifiés ce jour avec CE POSTE EXACT dans un de leurs créneaux
+  const planned=DATA.emps.filter(e=>{
+    const shifts=getShifts(dk,e.id);
+    return shifts.some(sh=>{
+      // Le poste du créneau, ou le poste principal si non défini
+      const shPoste=sh.poste||(e.postes&&e.postes[0])||'';
+      return shPoste===poste;
+    });
+  });
 
   const div=document.createElement('div');
   div.className=`poste ${cls}${flex?' '+flex:''}`;
@@ -522,9 +541,8 @@ function buildPosteCard(conf){
       sel.appendChild(o);
     }
 
-    // Pré-remplissage : placement sauvegardé ou premier planifié disponible
-    let pre=getPlacement(dk,poste,i);
-    if(!pre&&planned[i])pre=planned[i].id;
+    // Pré-remplissage : d'abord les planifiés (source JSONBin), ensuite placement sauvegardé
+    let pre = planned[i] ? planned[i].id : getPlacement(dk,poste,i);
     if(pre)sel.value=pre;
 
     const horaireDiv=document.createElement('div');
