@@ -152,6 +152,13 @@ body{font-family:'Barlow',sans-serif;background:#F0F4F8;min-height:100vh;}
     <div><div class="brand-name">La Marmite Bleue</div><div class="brand-sub">Plan de positionnement</div></div>
   </div>
   <div class="day-pills" id="day-pills"></div>
+  <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+    <button class="btn-toolbar btn-reset-s" onclick="changeWeek(-1)" style="font-size:16px;padding:6px 10px">‹</button>
+    <input type="date" id="date-picker" onchange="goToDate(this.value)"
+      style="border:1px solid #E2E8F0;border-radius:8px;padding:6px 8px;font-size:12px;font-family:inherit;outline:none;color:#374151;background:#fff;cursor:pointer">
+    <button class="btn-toolbar btn-reset-s" onclick="changeWeek(1)" style="font-size:16px;padding:6px 10px">›</button>
+    <button class="btn-toolbar btn-reset-s" onclick="goToToday()" style="font-size:11px">Auj.</button>
+  </div>
   <div class="tbar-spacer"></div>
   <div class="sync-dot" id="sync-dot" title="Synchronisé"></div>
   <button class="btn-toolbar btn-reset-s" onclick="reloadData()">🔄 Actualiser</button>
@@ -254,6 +261,7 @@ const ZONES = {
 
 let DATA = {emps:[], plan:{}, fc:{}};
 let SEL_DAY = toISO(new Date());
+let CURRENT_MON = getMonday(new Date()); // lundi de la semaine affichée
 let API_KEY='', BIN_ID='';
 // plan de positionnement sauvegardé localement : {dk: {poste_idx: empId}}
 let PLACEMENT = {};
@@ -269,7 +277,30 @@ function toISO(d){
 function fDay(d){return d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric'});}
 function fDate(d){return new Date(d+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}
 function isWE(d){return new Date(d+'T12:00').getDay()===0||new Date(d+'T12:00').getDay()===6;}
-function getDays(){const m=getMonday(new Date());return Array.from({length:7},(_,i)=>toISO(addDays(m,i)));}
+function getDays(){
+  return Array.from({length:7},(_,i)=>toISO(addDays(CURRENT_MON,i)));
+}
+function changeWeek(n){
+  CURRENT_MON=addDays(CURRENT_MON,n*7);
+  // Sélectionner le lundi de la nouvelle semaine par défaut
+  SEL_DAY=toISO(CURRENT_MON);
+  buildDayPills();
+  buildPlan();
+}
+function goToDate(val){
+  if(!val)return;
+  const d=new Date(val+'T12:00:00');
+  CURRENT_MON=getMonday(d);
+  SEL_DAY=toISO(d);
+  buildDayPills();
+  buildPlan();
+}
+function goToToday(){
+  CURRENT_MON=getMonday(new Date());
+  SEL_DAY=toISO(new Date());
+  buildDayPills();
+  buildPlan();
+}
 function fT(m){const h=Math.floor(m/60)%24,mm=m%60;return h+'h'+(mm?String(mm).padStart(2,'0'):'');}
 function mainPoste(e){return(e.postes||[])[0]||POSTES[0];}
 function getShifts(dk,eid){
@@ -443,13 +474,21 @@ function startApp(){
 // ══════════════════════════════════════
 function buildDayPills(){
   const days=getDays();
+  // Sync date picker
+  const picker=document.getElementById('date-picker');
+  if(picker)picker.value=SEL_DAY;
+  // Week label
+  const mon=CURRENT_MON;
+  const sun=addDays(mon,6);
+  const wkLbl=mon.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+' – '+sun.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
   const el=document.getElementById('day-pills');
-  el.innerHTML=days.map(dk=>{
-    const d=new Date(dk+'T12:00'),we=isWE(dk),sel=dk===SEL_DAY;
-    return`<button class="day-pill${sel?' active':''}${!sel&&we?' we':''}" onclick="selectDay('${dk}')">
-      <span style="text-transform:capitalize">${fDay(d)}</span>
-    </button>`;
-  }).join('');
+  el.innerHTML=`<span style="font-size:11px;font-weight:600;color:#64748B;white-space:nowrap;flex-shrink:0">${wkLbl}</span>`
+    +days.map(dk=>{
+      const d=new Date(dk+'T12:00:00'),we=isWE(dk),sel=dk===SEL_DAY;
+      return`<button class="day-pill${sel?' active':''}${!sel&&we?' we':''}" onclick="selectDay('${dk}')">
+        <span style="text-transform:capitalize">${fDay(d)}</span>
+      </button>`;
+    }).join('');
 }
 
 function selectDay(dk){
